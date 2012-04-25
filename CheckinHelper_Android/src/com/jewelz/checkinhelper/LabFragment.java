@@ -1,10 +1,12 @@
 package com.jewelz.checkinhelper;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -23,6 +25,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class LabFragment extends Fragment {
 
@@ -52,32 +55,67 @@ public class LabFragment extends Fragment {
 		View v = inflater.inflate(R.layout.lab, container, false);
 		LabImage = (ImageView) v.findViewById(R.id.lab_img);
 		if (!thread.isAlive()) {
-			thread.start();			
+			thread.start();
 		}
 		handler.post(new SetImage());
 		return v;
 	}
 
-//	@Override
-//	public void onPause() {
-//		if (thread.isAlive()) {
-//			thread.interrupt();
-//		}
-//		super.onPause();
-//	}
-//
-//	@Override
-//	public void onResume() {
-//		super.onResume();
-//		if (!thread.isAlive()) {
-//			thread.start();
-//		}
-//	}
+	// @Override
+	// public void onPause() {
+	// if (thread.isAlive()) {
+	// thread.interrupt();
+	// }
+	// super.onPause();
+	// }
+	//
+	// @Override
+	// public void onResume() {
+	// super.onResume();
+	// if (!thread.isAlive()) {
+	// thread.start();
+	// }
+	// }
 
 	class OnOnListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
-			// TODO Auto-generated method stub
+			new Thread() {
+
+				public void run() {
+					try {
+						Socket socket = new Socket(MainActivity.SERVER_IP,
+								MainActivity.SERVER_PORT);
+						PrintWriter writer = new PrintWriter(
+								new OutputStreamWriter(
+										new BufferedOutputStream(
+												socket.getOutputStream()),
+										"UTF-8"));
+						writer.println("light on");
+						writer.flush();
+
+						BufferedReader reader = new BufferedReader(
+								new InputStreamReader(socket.getInputStream(),
+										"UTF-8"));
+						boolean result = Boolean
+								.parseBoolean(reader.readLine());
+						if (result) {
+							handler.post(new ShowToast("Light turned on!"));
+						} else {
+							handler.post(new ShowToast("Failed!"));
+						}
+
+						reader.close();
+						writer.close();
+						socket.close();
+					} catch (UnknownHostException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+
+			}.start();
 			return false;
 		}
 
@@ -86,7 +124,42 @@ public class LabFragment extends Fragment {
 	class OnOffListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
-			// TODO Auto-generated method stub
+			new Thread() {
+
+				public void run() {
+					try {
+						Socket socket = new Socket(MainActivity.SERVER_IP,
+								MainActivity.SERVER_PORT);
+						PrintWriter writer = new PrintWriter(
+								new OutputStreamWriter(
+										new BufferedOutputStream(
+												socket.getOutputStream()),
+										"UTF-8"));
+						writer.println("light off");
+						writer.flush();
+						
+						BufferedReader reader = new BufferedReader(
+								new InputStreamReader(socket.getInputStream(),
+										"UTF-8"));
+						boolean result = Boolean
+								.parseBoolean(reader.readLine());
+						if (result) {
+							handler.post(new ShowToast("Light turned off!"));
+						} else {
+							handler.post(new ShowToast("Failed!"));
+						}
+
+						reader.close();
+						writer.close();
+						socket.close();
+					} catch (UnknownHostException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+
+			}.start();
 			return false;
 		}
 
@@ -110,7 +183,7 @@ public class LabFragment extends Fragment {
 					DataOutputStream out = new DataOutputStream(
 							new BufferedOutputStream(new FileOutputStream(
 									img_path)));
-					
+
 					byte[] buf = new byte[8192];
 					while (true) {
 						int read = 0;
@@ -122,7 +195,7 @@ public class LabFragment extends Fragment {
 						}
 						out.write(buf, 0, read);
 					}
-					
+
 					ins.close();
 					writer.close();
 					socket.close();
@@ -154,6 +227,20 @@ public class LabFragment extends Fragment {
 			if (bmp != null) {
 				LabImage.setImageBitmap(bmp);
 			}
+		}
+
+	}
+
+	class ShowToast implements Runnable {
+
+		String message;
+
+		public ShowToast(String msg) {
+			this.message = msg;
+		}
+
+		public void run() {
+			Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 		}
 
 	}

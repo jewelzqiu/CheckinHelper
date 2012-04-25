@@ -20,10 +20,18 @@ public class UidInputDialog extends Dialog {
 	EditText CodeText;
 	TextView NameView;
 	Button OK_Btn;
+	
+	CheckInFragment checkinFragment;
 
 	public UidInputDialog(Context context, int which) {
 		super(context);
 		this.which = which;
+	}
+	
+	public UidInputDialog(Context context, int which, CheckInFragment ch) {
+		super(context);
+		this.which = which;
+		this.checkinFragment = ch;
 	}
 
 	@Override
@@ -64,10 +72,10 @@ public class UidInputDialog extends Dialog {
 					break;
 				case CheckInFragment.ADD:
 					String name = NameText.getText().toString();
-					CheckInFragment.addMember(uid, name);
+					checkinFragment.addMember(uid, name);
 					break;
 				case CheckInFragment.REMOVE:
-					CheckInFragment.removeMember(uid);
+					checkinFragment.removeMember(uid);
 					break;
 				}
 				dismiss();

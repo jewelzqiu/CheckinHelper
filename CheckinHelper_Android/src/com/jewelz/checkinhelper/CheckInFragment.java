@@ -20,7 +20,6 @@ import weibo4j.examples.MyWeibo;
 import com.github.mhendred.face4j.examples.MyExample;
 import com.github.mhendred.face4j.exception.FaceClientException;
 import com.github.mhendred.face4j.exception.FaceServerException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -41,6 +40,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class CheckInFragment extends Fragment {
 
@@ -250,7 +250,7 @@ public class CheckInFragment extends Fragment {
 
 		public boolean onMenuItemClick(MenuItem item) {
 			System.out.println(item.getTitle());
-			new UidInputDialog(getActivity(), ADD).show();
+			new UidInputDialog(getActivity(), ADD, CheckInFragment.this).show();
 			return false;
 		}
 
@@ -260,7 +260,8 @@ public class CheckInFragment extends Fragment {
 
 		public boolean onMenuItemClick(MenuItem item) {
 			System.out.println(item.getTitle());
-			new UidInputDialog(getActivity(), REMOVE).show();
+			new UidInputDialog(getActivity(), REMOVE, CheckInFragment.this)
+					.show();
 			return false;
 		}
 
@@ -467,7 +468,7 @@ public class CheckInFragment extends Fragment {
 
 	}
 
-	static void addMember(final String uid, final String name) {
+	void addMember(final String uid, final String name) {
 		new Thread() {
 
 			public void run() {
@@ -480,6 +481,14 @@ public class CheckInFragment extends Fragment {
 
 					writer.println("add " + uid + " " + name);
 					writer.flush();
+
+					BufferedReader reader = new BufferedReader(
+							new InputStreamReader(socket.getInputStream(),
+									"UTF-8"));
+					String name = reader.readLine();
+					handler.post(new ShowToast(name + " added!"));
+
+					reader.close();
 					writer.close();
 					socket.close();
 				} catch (UnknownHostException e) {
@@ -494,7 +503,7 @@ public class CheckInFragment extends Fragment {
 		updateNamelist();
 	}
 
-	static void removeMember(final String uid) {
+	void removeMember(final String uid) {
 		new Thread() {
 
 			public void run() {
@@ -507,6 +516,18 @@ public class CheckInFragment extends Fragment {
 
 					writer.println("remove " + uid);
 					writer.flush();
+
+					BufferedReader reader = new BufferedReader(
+							new InputStreamReader(socket.getInputStream(),
+									"UTF-8"));
+					String name = reader.readLine();
+					if (name.equals("null") || name == null) {
+						handler.post(new ShowToast("failed!"));
+					} else {
+						handler.post(new ShowToast(name + " removed!"));
+					}
+
+					reader.close();
 					writer.close();
 					socket.close();
 				} catch (UnknownHostException e) {
@@ -575,6 +596,20 @@ public class CheckInFragment extends Fragment {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	class ShowToast implements Runnable {
+
+		String message;
+
+		public ShowToast(String msg) {
+			this.message = msg;
+		}
+
+		public void run() {
+			Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+		}
+
 	}
 
 }

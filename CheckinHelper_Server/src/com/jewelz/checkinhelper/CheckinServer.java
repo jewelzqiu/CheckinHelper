@@ -29,6 +29,7 @@ public class CheckinServer {
 	Thread ServerThread;
 
 	static DB database = new DB();
+	LightControl Lightcontrol = new LightControl();
 
 	public void start() {
 		BufferedReader reader;
@@ -131,11 +132,12 @@ public class CheckinServer {
 						String data = tokenizer.nextToken();
 						String name = tokenizer.nextToken();
 						addMember(data, name);
-						System.out.println("added a new member: " + name);
+						writer.println(name);
+						System.out.println("add: " + name);
 					} else if (command.equals("remove")) {
 						String data = tokenizer.nextToken();
-						System.out.println("removed a member: "
-								+ removeMember(data));
+						writer.println(removeMember(data));
+						System.out.println("remove : " + data);
 					} else if (command.toLowerCase().equals("select")) {
 						String result = database.query(line);
 						System.out.print(result);
@@ -162,6 +164,13 @@ public class CheckinServer {
 						output.flush();
 						infile.close();
 						output.close();
+					} else if (command.equals("light")) {
+						String data = tokenizer.nextToken();
+						if (data.equals("on")) {
+							writer.println(Lightcontrol.lightOn());
+						} else if (data.equals("off")) {
+							writer.println(Lightcontrol.lightOff());
+						}
 					}
 					writer.flush();
 					writer.close();
