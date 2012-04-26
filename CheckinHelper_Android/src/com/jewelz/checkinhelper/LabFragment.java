@@ -54,28 +54,28 @@ public class LabFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.lab, container, false);
 		LabImage = (ImageView) v.findViewById(R.id.lab_img);
-		if (!thread.isAlive()) {
-			thread.start();
-		}
+//		if (!thread.isAlive()) {
+//			thread.start();
+//		}
 		handler.post(new SetImage());
 		return v;
 	}
 
-	// @Override
-	// public void onPause() {
-	// if (thread.isAlive()) {
-	// thread.interrupt();
-	// }
-	// super.onPause();
-	// }
-	//
-	// @Override
-	// public void onResume() {
-	// super.onResume();
-	// if (!thread.isAlive()) {
-	// thread.start();
-	// }
-	// }
+	@Override
+	public void onPause() {
+		if (thread.isAlive()) {
+			thread.interrupt();
+		}
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (!thread.isAlive()) {
+			thread.start();
+		}
+	}
 
 	class OnOnListener implements OnMenuItemClickListener {
 
