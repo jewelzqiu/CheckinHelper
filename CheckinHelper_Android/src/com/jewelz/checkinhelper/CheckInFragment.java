@@ -176,6 +176,8 @@ public class CheckInFragment extends Fragment {
 
 		if (Activity.RESULT_OK == resultCode) {
 			setImage(false);
+			names = "";
+			uids = "";
 
 			if (requestCode == CHECK) {
 
@@ -186,8 +188,7 @@ public class CheckInFragment extends Fragment {
 						try {
 							HashSet<String> list = FaceRec
 									.recognize(MainActivity.path);
-							names = "";
-							uids = "";
+
 							for (String uid : list) {
 								if (namelist.containsKey(uid)) {
 									names += namelist.get(uid) + " ";
@@ -336,6 +337,17 @@ public class CheckInFragment extends Fragment {
 						if (msg.length() > 0) {
 							if (present.size() == 0) {
 								msg += "There is no one in the lab!";
+								Socket light_socket = new Socket(
+										MainActivity.SERVER_IP,
+										MainActivity.SERVER_PORT);
+								PrintWriter light_writer = new PrintWriter(
+										new OutputStreamWriter(
+												new BufferedOutputStream(socket
+														.getOutputStream()),
+												"UTF-8"));
+								light_writer.println("light off");
+								light_writer.close();
+								light_socket.close();
 							} else {
 								for (String id : present) {
 									msg += namelist.get(id) + " ";

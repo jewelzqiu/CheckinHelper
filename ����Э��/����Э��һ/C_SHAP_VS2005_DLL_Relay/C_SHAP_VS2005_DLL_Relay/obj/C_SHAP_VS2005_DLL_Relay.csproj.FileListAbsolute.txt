@@ -1,8 +1,0 @@
-D:\开发软件\继电器控制\VS2005_DLL\C_SHAP_VS2005_DLL_Relay\C_SHAP_VS2005_DLL_Relay\bin\Debug\C_SHAP_VS2005_DLL_Relay.exe
-D:\开发软件\继电器控制\VS2005_DLL\C_SHAP_VS2005_DLL_Relay\C_SHAP_VS2005_DLL_Relay\bin\Debug\C_SHAP_VS2005_DLL_Relay.pdb
-D:\开发软件\继电器控制\VS2005_DLL\C_SHAP_VS2005_DLL_Relay\C_SHAP_VS2005_DLL_Relay\obj\Debug\ResolveAssemblyReference.cache
-D:\开发软件\继电器控制\VS2005_DLL\C_SHAP_VS2005_DLL_Relay\C_SHAP_VS2005_DLL_Relay\obj\Debug\C_SHAP_VS2005_DLL_Relay.Form1.resources
-D:\开发软件\继电器控制\VS2005_DLL\C_SHAP_VS2005_DLL_Relay\C_SHAP_VS2005_DLL_Relay\obj\Debug\C_SHAP_VS2005_DLL_Relay.Properties.Resources.resources
-D:\开发软件\继电器控制\VS2005_DLL\C_SHAP_VS2005_DLL_Relay\C_SHAP_VS2005_DLL_Relay\obj\Debug\C_SHAP_VS2005_DLL_Relay.csproj.GenerateResource.Cache
-D:\开发软件\继电器控制\VS2005_DLL\C_SHAP_VS2005_DLL_Relay\C_SHAP_VS2005_DLL_Relay\obj\Debug\C_SHAP_VS2005_DLL_Relay.exe
-D:\开发软件\继电器控制\VS2005_DLL\C_SHAP_VS2005_DLL_Relay\C_SHAP_VS2005_DLL_Relay\obj\Debug\C_SHAP_VS2005_DLL_Relay.pdb
