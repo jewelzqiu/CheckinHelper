@@ -602,7 +602,7 @@ public class CheckInFragment extends Fragment {
 		if (!first) {
 			try {
 				FileOutputStream fout = new FileOutputStream(MainActivity.path);
-				bmp.compress(Bitmap.CompressFormat.JPEG, 100, fout);
+				bmp.compress(Bitmap.CompressFormat.JPEG, 80, fout);
 				fout.flush();
 				fout.close();
 			} catch (IOException e) {
