@@ -5,10 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import weibo4j.Status;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
-import weibo4j.http.RequestToken;
 
 public class MyWeibo {
 
@@ -18,20 +16,22 @@ public class MyWeibo {
 			System.setProperty("weibo4j.oauth.consumerSecret",
 					Weibo.CONSUMER_SECRET);
 			Weibo weibo = new Weibo();
-			RequestToken requestToken;
-			requestToken = weibo.getOAuthRequestToken();
-
-			System.out.println("Got request token.");
-			System.out.println("Request token: " + requestToken.getToken());
-			System.out.println("Request token secret: "
-					+ requestToken.getTokenSecret());
+			// RequestToken requestToken;
+			// requestToken = weibo.getOAuthRequestToken();
+			//
+			// System.out.println("Got request token.");
+			// System.out.println("Request token: " + requestToken.getToken());
+			// System.out.println("Request token secret: "
+			// + requestToken.getTokenSecret());
 
 			weibo.setToken("37c99e4670202a3cccc2e3e5865d16d4",
 					"0232fab516389c7929f35afe78beadc2");
 
-			Status status = weibo.updateStatus(mystatus, 31.02497, 121.44137);
-			System.out.println("Successfully updated the status to ["
-					+ status.getText() + "].");
+			weibo.updateStatus(mystatus, 31.02497, 121.44137);
+			// Status status = weibo.updateStatus(mystatus, 31.02497,
+			// 121.44137);
+			// System.out.println("Successfully updated the status to ["
+			// + status.getText() + "].");
 
 			try {
 				Thread.sleep(3000);
@@ -57,11 +57,12 @@ public class MyWeibo {
 
 			try {
 				String s = java.net.URLEncoder.encode(mystatus, "utf-8");
-				Status status = weibo.uploadStatus(s, new File(Filename),
-						31.02497, 121.44137);
-
-				System.out.println("Successfully upload the status to ["
-						+ status.getText() + status.getOriginal_pic() + "].");
+				weibo.uploadStatus(s, new File(Filename), 31.02497, 121.44137);
+				// Status status = weibo.uploadStatus(s, new File(Filename),
+				// 31.02497, 121.44137);
+				//
+				// System.out.println("Successfully upload the status to ["
+				// + status.getText() + status.getOriginal_pic() + "].");
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -83,5 +84,5 @@ public class MyWeibo {
 		bufferedInputStream.close();
 		return bytes;
 	}
-	
+
 }

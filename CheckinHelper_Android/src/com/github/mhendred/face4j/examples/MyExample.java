@@ -31,7 +31,7 @@ public class MyExample {
 		Face f = photo.getFace();
     	faceClient.saveTags(f.getTID(), uid, label);
     	TrainResponse response = faceClient.train(uid);
-    	System.out.println(response);
+    	//System.out.println(response);
     	
     	List<UserStatus> updated = response.getUpdated();
     	Iterator<UserStatus> iterator = updated.iterator();
@@ -60,7 +60,7 @@ public class MyExample {
 		Photo photo = faceClient.recognize(new File(filename), "all@" + NAMESPACE);
 		for (Face face : photo.getFaces()) {
 			for (Guess guess : face.getGuesses()) {
-				System.out.println(guess);
+				//System.out.println(guess);
 				if (list.contains(guess.first.substring(0, guess.first.indexOf('@')))) {
 					continue;
 				}
