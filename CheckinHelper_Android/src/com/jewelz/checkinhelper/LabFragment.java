@@ -32,7 +32,12 @@ public class LabFragment extends Fragment {
 	ImageView LabImage;
 	String img_path = MainActivity.folder + "/lab.jpg";
 	Handler handler = new Handler();
-	GetImage thread = new GetImage();
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		handler.removeCallbacks(SetImage);
+	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -54,27 +59,23 @@ public class LabFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.lab, container, false);
 		LabImage = (ImageView) v.findViewById(R.id.lab_img);
-//		if (!thread.isAlive()) {
-//			thread.start();
-//		}
-		handler.post(new SetImage());
+		Bitmap bmp = BitmapFactory.decodeFile(img_path);
+		if (bmp != null) {
+			LabImage.setImageBitmap(bmp);
+		}
 		return v;
 	}
 
 	@Override
 	public void onPause() {
-		if (thread.isAlive()) {
-			thread.interrupt();
-		}
+		handler.removeCallbacks(SetImage);
 		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (!thread.isAlive()) {
-			thread.start();
-		}
+		handler.post(SetImage);
 	}
 
 	class OnOnListener implements OnMenuItemClickListener {
@@ -137,7 +138,7 @@ public class LabFragment extends Fragment {
 										"UTF-8"));
 						writer.println("light off");
 						writer.flush();
-						
+
 						BufferedReader reader = new BufferedReader(
 								new InputStreamReader(socket.getInputStream(),
 										"UTF-8"));
@@ -165,71 +166,63 @@ public class LabFragment extends Fragment {
 
 	}
 
-	class GetImage extends Thread {
+	Runnable SetImage = new Runnable() {
 
 		public void run() {
-			while (true) {
-				try {
-					Socket socket = new Socket(MainActivity.SERVER_IP,
-							MainActivity.SERVER_PORT);
-					PrintWriter writer = new PrintWriter(
-							new OutputStreamWriter(new BufferedOutputStream(
-									socket.getOutputStream()), "UTF-8"));
-					writer.println("labimage");
-					writer.flush();
+			
+			new Thread() {
 
-					DataInputStream ins = new DataInputStream(
-							socket.getInputStream());
-					DataOutputStream out = new DataOutputStream(
-							new BufferedOutputStream(new FileOutputStream(
-									img_path)));
+				public void run() {
+					try {
+						Socket socket = new Socket(MainActivity.SERVER_IP,
+								MainActivity.SERVER_PORT);
+						PrintWriter writer = new PrintWriter(
+								new OutputStreamWriter(
+										new BufferedOutputStream(
+												socket.getOutputStream()),
+										"UTF-8"));
+						writer.println("labimage");
+						writer.flush();
 
-					byte[] buf = new byte[8192];
-					while (true) {
-						int read = 0;
-						if (ins != null) {
-							read = ins.read(buf);
+						DataInputStream ins = new DataInputStream(
+								socket.getInputStream());
+						DataOutputStream out = new DataOutputStream(
+								new BufferedOutputStream(new FileOutputStream(
+										img_path)));
+
+						byte[] buf = new byte[8192];
+						while (true) {
+							int read = 0;
+							if (ins != null) {
+								read = ins.read(buf);
+							}
+							if (read == -1) {
+								break;
+							}
+							out.write(buf, 0, read);
 						}
-						if (read == -1) {
-							break;
-						}
-						out.write(buf, 0, read);
+
+						ins.close();
+						writer.close();
+						socket.close();
+						out.close();
+
+					} catch (UnknownHostException e1) {
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						e1.printStackTrace();
 					}
-
-					ins.close();
-					writer.close();
-					socket.close();
-					out.close();
-
-				} catch (UnknownHostException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
 				}
 
-				handler.post(new SetImage());
-
-				try {
-					sleep(1000 * 60);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					this.interrupt();
-				}
-			}
-		}
-
-	}
-
-	class SetImage implements Runnable {
-
-		public void run() {
+			}.start();
+			
 			Bitmap bmp = BitmapFactory.decodeFile(img_path);
 			if (bmp != null) {
 				LabImage.setImageBitmap(bmp);
 			}
+			handler.postDelayed(SetImage, 60 * 1000);
 		}
-
-	}
+	};
 
 	class ShowToast implements Runnable {
 

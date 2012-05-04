@@ -60,23 +60,23 @@ public class ViewFragment extends PreferenceFragment {
 
 	}
 
-	class OnPreviousListener implements OnMenuItemClickListener {
-
-		public boolean onMenuItemClick(MenuItem item) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-	}
-
-	class OnNextListener implements OnMenuItemClickListener {
-
-		public boolean onMenuItemClick(MenuItem item) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-	}
+//	class OnPreviousListener implements OnMenuItemClickListener {
+//
+//		public boolean onMenuItemClick(MenuItem item) {
+//			// TODO Auto-generated method stub
+//			return false;
+//		}
+//
+//	}
+//
+//	class OnNextListener implements OnMenuItemClickListener {
+//
+//		public boolean onMenuItemClick(MenuItem item) {
+//			// TODO Auto-generated method stub
+//			return false;
+//		}
+//
+//	}
 
 	public class SetData implements Runnable {
 
@@ -146,7 +146,7 @@ public class ViewFragment extends PreferenceFragment {
 				ArrayList<String> data = new ArrayList<String>();
 				String line = reader.readLine();
 				while (line != null) {
-					System.out.println(line);
+//					System.out.println(line);
 					data.add(line);
 					line = reader.readLine();
 				}
