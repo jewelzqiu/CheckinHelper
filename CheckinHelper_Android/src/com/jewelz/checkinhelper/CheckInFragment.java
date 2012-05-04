@@ -218,8 +218,8 @@ public class CheckInFragment extends Fragment {
 	class OnCheckListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
-//			System.out.println(namelist);
-//			System.out.println(item.getTitle());
+			// System.out.println(namelist);
+			// System.out.println(item.getTitle());
 			File image = new File(MainActivity.path_ori);
 			Uri imageUri = Uri.fromFile(image);
 			Intent intent = new Intent(
@@ -234,8 +234,8 @@ public class CheckInFragment extends Fragment {
 	class OnTrainListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
-//			System.out.println(namelist);
-//			System.out.println(item.getTitle());
+			// System.out.println(namelist);
+			// System.out.println(item.getTitle());
 			File image = new File(MainActivity.path_ori);
 			Uri imageUri = Uri.fromFile(image);
 			Intent intent = new Intent(
@@ -250,7 +250,7 @@ public class CheckInFragment extends Fragment {
 	class OnAddListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
-//			System.out.println(item.getTitle());
+			// System.out.println(item.getTitle());
 			new UidInputDialog(getActivity(), ADD, CheckInFragment.this).show();
 			return false;
 		}
@@ -260,7 +260,7 @@ public class CheckInFragment extends Fragment {
 	class OnRemoveListener implements OnMenuItemClickListener {
 
 		public boolean onMenuItemClick(MenuItem item) {
-//			System.out.println(item.getTitle());
+			// System.out.println(item.getTitle());
 			new UidInputDialog(getActivity(), REMOVE, CheckInFragment.this)
 					.show();
 			return false;
@@ -342,8 +342,9 @@ public class CheckInFragment extends Fragment {
 										MainActivity.SERVER_PORT);
 								PrintWriter light_writer = new PrintWriter(
 										new OutputStreamWriter(
-												new BufferedOutputStream(socket
-														.getOutputStream()),
+												new BufferedOutputStream(
+														light_socket
+																.getOutputStream()),
 												"UTF-8"));
 								light_writer.println("light off");
 								light_writer.close();
@@ -354,7 +355,7 @@ public class CheckInFragment extends Fragment {
 								}
 								msg += "is in the lab!";
 							}
-//							System.out.println(msg);
+							//System.out.println(msg);
 							MyWeibo.upload(msg, MainActivity.path_ori);
 						}
 
@@ -380,7 +381,7 @@ public class CheckInFragment extends Fragment {
 				new Thread() {
 
 					public void run() {
-//						System.out.println("who is this guy?");
+						// System.out.println("who is this guy?");
 						MyWeibo.upload("Who is this guy?",
 								MainActivity.path_ori);
 						CheckInFragment.count = 0;
@@ -422,7 +423,7 @@ public class CheckInFragment extends Fragment {
 					String line = reader.readLine();
 					namelist.clear();
 					while (line != null) {
-//						System.out.println(line);
+						// System.out.println(line);
 						StringTokenizer tokenizer = new StringTokenizer(line);
 						String uid = tokenizer.nextToken();
 						String name = tokenizer.nextToken();

@@ -108,6 +108,9 @@ public class CheckinServer {
 							new OutputStreamWriter(new BufferedOutputStream(
 									socket.getOutputStream()), "UTF-8"));
 					String line = reader.readLine();
+					if (line == null) {
+						continue;
+					}
 					System.out.println(line);
 					StringTokenizer tokenizer = new StringTokenizer(line);
 					String command = tokenizer.nextToken();
