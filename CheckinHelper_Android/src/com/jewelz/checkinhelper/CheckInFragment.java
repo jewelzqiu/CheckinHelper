@@ -381,7 +381,6 @@ public class CheckInFragment extends Fragment {
 				new Thread() {
 
 					public void run() {
-						// System.out.println("who is this guy?");
 						MyWeibo.upload("Who is this guy?",
 								MainActivity.path_ori);
 						CheckInFragment.count = 0;

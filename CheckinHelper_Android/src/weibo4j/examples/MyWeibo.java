@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import weibo4j.Status;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
@@ -24,8 +25,8 @@ public class MyWeibo {
 			// System.out.println("Request token secret: "
 			// + requestToken.getTokenSecret());
 
-			weibo.setToken("37c99e4670202a3cccc2e3e5865d16d4",
-					"0232fab516389c7929f35afe78beadc2");
+			// your token here!!!
+			weibo.setToken("", "");
 
 			weibo.updateStatus(mystatus, 31.02497, 121.44137);
 			// Status status = weibo.updateStatus(mystatus, 31.02497,
@@ -57,14 +58,13 @@ public class MyWeibo {
 
 			try {
 				String s = java.net.URLEncoder.encode(mystatus, "utf-8");
-				weibo.uploadStatus(s, new File(Filename), 31.02497, 121.44137);
-				// Status status = weibo.uploadStatus(s, new File(Filename),
-				// 31.02497, 121.44137);
-				//
-				// System.out.println("Successfully upload the status to ["
-				// + status.getText() + status.getOriginal_pic() + "].");
+				Status status = weibo.uploadStatus(s, new File(Filename),
+						31.02497, 121.44137);
+				
+				System.out.println("Successfully upload the status to ["
+						+ status.getText() + status.getOriginal_pic() + "].");
 			} catch (Exception e1) {
-				e1.printStackTrace();
+				e1.printStackTrace(System.out);
 			}
 		} catch (Exception ioe) {
 			System.out.println("Failed to read the system input.");
