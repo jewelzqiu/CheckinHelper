@@ -17,56 +17,63 @@ import com.github.mhendred.face4j.response.TrainResponse;
 
 public class MyExample {
 
-	protected static final String API_KEY = "56cc7ba56ff82ead6552f8190ebf5745";	
+	protected static final String API_KEY = "56cc7ba56ff82ead6552f8190ebf5745";
 	protected static final String API_SEC = "ef8e7604d2581be04bc5e7787b9e0e51";
 	protected static final String NAMESPACE = "radlab";
-	
+
 	FaceClient faceClient = new DefaultFaceClient(API_KEY, API_SEC);
-	
+
 	public boolean train(String filename, String id, String label)
 			throws FaceClientException, FaceServerException {
 		String uid = id + "@" + NAMESPACE;
-		label = (label == null) ? "label" : label;		
+		label = (label == null) ? "label" : label;
 		Photo photo = faceClient.detect(new File(filename));
 		Face f = photo.getFace();
-    	faceClient.saveTags(f.getTID(), uid, label);
-    	TrainResponse response = faceClient.train(uid);
-    	//System.out.println(response);
-    	
-    	List<UserStatus> updated = response.getUpdated();
-    	Iterator<UserStatus> iterator = updated.iterator();
-    	while (iterator.hasNext()) {
-    		UserStatus status = iterator.next();
-    		if (status.getUID().equals(uid)) {
-    			return true;
-    		}
-    	}
-    	
-    	List<UserStatus> created = response.getCreated();
-    	iterator = created.iterator();
-    	while (iterator.hasNext()) {
-    		UserStatus status = iterator.next();
-    		if (status.getUID().equals(uid)) {
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+		faceClient.saveTags(f.getTID(), uid, label);
+		TrainResponse response = faceClient.train(uid);
+		// System.out.println(response);
+
+		List<UserStatus> updated = response.getUpdated();
+		Iterator<UserStatus> iterator = updated.iterator();
+		while (iterator.hasNext()) {
+			UserStatus status = iterator.next();
+			if (status.getUID().equals(uid)) {
+				return true;
+			}
+		}
+
+		List<UserStatus> created = response.getCreated();
+		iterator = created.iterator();
+		while (iterator.hasNext()) {
+			UserStatus status = iterator.next();
+			if (status.getUID().equals(uid)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
-	
+
 	public HashSet<String> recognize(String filename)
 			throws FaceClientException, FaceServerException {
 		HashSet<String> list = new HashSet<String>();
-		Photo photo = faceClient.recognize(new File(filename), "all@" + NAMESPACE);
+		Photo photo = faceClient.recognize(new File(filename), "all@"
+				+ NAMESPACE);
 		for (Face face : photo.getFaces()) {
+			Guess FinalGuess = null;
 			for (Guess guess : face.getGuesses()) {
-				//System.out.println(guess);
-				if (list.contains(guess.first.substring(0, guess.first.indexOf('@')))) {
+				System.out.println(guess);
+				if (list.contains(guess.first.substring(0,
+						guess.first.indexOf('@')))) {
 					continue;
 				}
-				if (guess.second > 40) {
-					list.add(guess.first.substring(0, guess.first.indexOf('@')));
+				if (FinalGuess == null || guess.second > FinalGuess.second) {
+					FinalGuess = guess;
 				}
+			}
+			if (FinalGuess.second > 60) {
+				list.add(FinalGuess.first.substring(0,
+						FinalGuess.first.indexOf('@')));
 			}
 		}
 		return list;

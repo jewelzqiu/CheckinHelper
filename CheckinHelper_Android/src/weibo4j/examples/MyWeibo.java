@@ -25,8 +25,8 @@ public class MyWeibo {
 			// System.out.println("Request token secret: "
 			// + requestToken.getTokenSecret());
 
-			// your token here!!!
-			weibo.setToken("", "");
+			weibo.setToken("37c99e4670202a3cccc2e3e5865d16d4",
+					"0232fab516389c7929f35afe78beadc2");
 
 			weibo.updateStatus(mystatus, 31.02497, 121.44137);
 			// Status status = weibo.updateStatus(mystatus, 31.02497,
